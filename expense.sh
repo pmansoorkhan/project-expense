@@ -5,6 +5,11 @@ AMI_ID="ami-0055977a6e828a4f4"
 ZONE_ID="Z01032422UQPZQPC0HZ2Q"
 DOMAIN_NAME="shannu.online"
 
+if [ "$USER_ID" -ne 0 ]; then
+    echo -e " $(date "+%Y-%m-%d %H:%M:%S")  | ${R} Please run the script as root user ${N}"
+    exit 1
+fi
+
 for instance in "$@"
 do 
 
