@@ -24,7 +24,7 @@ INSTANCE_ID=$( aws ec2 run-instances \
                     --query "Reservations[].Instances[].PublicIpAddress" \
                     --output text          
                     )
-            sleep 10        
+            sleep 5       
             RECORD_NAME="$DOMAIN_NAME"     #shannu.online    
         else 
                 IP=$( aws ec2 describe-instances \
@@ -32,7 +32,7 @@ INSTANCE_ID=$( aws ec2 run-instances \
                 --query "Reservations[].Instances[].PrivateIpAddress" \
                 --output text
                 )
-            sleep 10
+            sleep 5
              RECORD_NAME="$instance.$DOMAIN_NAME"    #mongodb.shannu.online
          
         fi            
