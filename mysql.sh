@@ -9,6 +9,7 @@ G="\e[32m"
 Y="\e[33m"
 B="\e[34m"
 N="\e[0m"  
+MYSQL_ROOT_PASSWORD="ExpenseApp@1"
 SCRIPT_DIR=$PWD
 START_TIME="$(date +%s)"
 mkdir -p "$LOG_FOLDER"     # Create log directory
@@ -28,4 +29,14 @@ VALIDATE() {
     fi
 }
 
+dnf install mysql-server -y  >> &$LOG_FILE
+VALIDATE $? "Installing MYSQL server"
+
+
+systemctl enable mysqld  >> &$LOG_FILE
+systemctl start mysqld  >> &$LOG_FILE
+VALIDATE $? "Enabling and starting MYSQL server"
+
+mysql_secure_installation --set-root-pass "$MYSQL_ROOT_PASSWORD"
+VALIDATE $? "Setting MYSQL root password"
 
