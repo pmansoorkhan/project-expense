@@ -27,3 +27,36 @@ VALIDATE() {
         echo -e "$(date "+%Y-%m-%d %H:%M:%S")  | $2 ...... ${G} successful ${N}" | tee -a "$LOG_FILE"
     fi
 }
+
+dnf install nginx -y 
+VALIDATE $? "Installing NGINX"
+
+systemctl enable nginx
+systemctl start nginx
+VALIDATE $? "Enabling and starting NGINX"
+
+rm -rf /usr/share/nginx/html/*
+VALIDATE $? "Removing default NGINX content"
+
+curl -o /tmp/frontend.zip https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+VALIDATE $? "Downloading frontend zip file"
+
+cd /usr/share/nginx/html
+VALIDATE $? "Moving to NGINX html directory"
+
+unzip /tmp/frontend.zip
+VALIDATE $? "Unzipping frontend zip file"
+
+cp "$SCRIPT_DIR/expense.conf"   /etc/nginx/default.d/expense.conf
+VALIDATE $? "Copying expense.conf to NGINX default.d directory"
+
+systemctl restart nginx
+VALIDATE $? "Restarting NGINX service"
+
+print_total_time(){
+    END_TIME="$(date +%s)"
+    TOTAL_TIME=$(( "$END_TIME" - "$START_TIME" ))
+    echo -e "$(date "+%Y-%m-%d %H:%M:%S")  | Script executed in :"${G} $TOTAL_TIME" seconds ${N}"  | tee -a "$LOG_FILE"
+}
+
+print_total_time
