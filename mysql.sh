@@ -47,3 +47,13 @@ print_total_time(){
 }
 
 print_total_time
+
+
+# ***************
+# Checking MYSQL database and tables from own machine using MYSQL client 
+# *********************
+# mysql 
+# show databases;
+# use transactions;
+# show tables;
+# select * from  transactions;
