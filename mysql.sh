@@ -29,12 +29,12 @@ VALIDATE() {
     fi
 }
 
-dnf install mysql-server -y  >> &$LOG_FILE
+dnf install mysql-server -y  &>> $LOG_FILE
 VALIDATE $? "Installing MYSQL server"
 
 
-systemctl enable mysqld  >> &$LOG_FILE
-systemctl start mysqld  >> &$LOG_FILE
+systemctl enable mysqld   &>> $LOG_FILE
+systemctl start mysqld    &>> $LOG_FILE
 VALIDATE $? "Enabling and starting MYSQL server"
 
 mysql_secure_installation --set-root-pass "$MYSQL_ROOT_PASSWORD"
