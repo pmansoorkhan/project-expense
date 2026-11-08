@@ -41,8 +41,13 @@ VALIDATE $? "Installing NODEJS"
 dnf update -y openssh openssh-server openssh-clients
 VALIDATE  $? "Updating SSH packages"
 
-useradd expense    &>> $LOG_FILE
-VALIDATE $? "Adding expense user"
+id expense  &>> $LOG_FILE
+if [ "$?" -ne 0 ]; then 
+   useradd --system --home /app --shell /sbin/nologin --comment "expense system user" expense  | tee -a "$LOG_FILE"
+   VALIDATE $? "Adding expense user"
+else 
+   echo -e " $(date "+%Y-%m-%d %H:%M:%S") ${B} User already exist ${N} .... ${Y} Skipping ${N} " | tee -a "$LOG_FILE"
+fi
 
 mkdir -p /app   &>> $LOG_FILE
 VALIDATE $? "Creating app directory"
