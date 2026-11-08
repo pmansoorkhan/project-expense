@@ -71,10 +71,18 @@ VALIDATE $? "Enabling and starting backend service"
 dnf install mysql -y
 VALIDATE $? "Installing MYSQL client package"
 
-mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 < /app/schema/backend.sql
-VALIDATE $? "Creating backend database and tables"
+# mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 < /app/schema/backend.sql
+# VALIDATE $? "Creating backend database and tables"
 
 # INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+Index=$(mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 -e 'show databases;' | grep backend | wc -l)
+
+if [ "$Index" -le 0 ]; then
+    mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 < /app/schema/backend.sql
+    VALIDATE $? "Creating backend database and tables"
+else
+    echo -e " $(date "+%Y-%m-%d %H:%M:%S")  | ${G}backend database already exists${N}......${Y}Skipping${N}"  
+fi
 
 # if [ "$INDEX" -le  0 ]; then 
 #     mongosh --host "$MONGODB_HOST" </app/db/master-data.js &>> "$LOG_FILE"
