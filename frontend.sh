@@ -28,14 +28,14 @@ VALIDATE() {
     fi
 }
 
-dnf install nginx -y 
+dnf install nginx -y  &>> $LOG_FILE
 VALIDATE $? "Installing NGINX"
 
-systemctl enable nginx
+systemctl enable nginx  &>> $LOG_FILE
 systemctl start nginx
 VALIDATE $? "Enabling and starting NGINX"
 
-rm -rf /usr/share/nginx/html/*
+rm -rf /usr/share/nginx/html/*   &>> $LOG_FILE
 VALIDATE $? "Removing default NGINX content"
 
 curl -o /tmp/frontend.zip https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
@@ -44,13 +44,13 @@ VALIDATE $? "Downloading frontend zip file"
 cd /usr/share/nginx/html
 VALIDATE $? "Moving to NGINX html directory"
 
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip  &>> $LOG_FILE
 VALIDATE $? "Unzipping frontend zip file"
 
-cp "$SCRIPT_DIR/expense.conf"   /etc/nginx/default.d/expense.conf
+cp "$SCRIPT_DIR/expense.conf"   /etc/nginx/default.d/expense.conf    &>> $LOG_FILE
 VALIDATE $? "Copying expense.conf to NGINX default.d directory"
 
-systemctl restart nginx
+systemctl restart nginx  &>> $LOG_FILE
 VALIDATE $? "Restarting NGINX service"
 
 print_total_time(){
