@@ -29,22 +29,22 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y     &>> $LOG_FILE
 VALIDATE $? "Disabling NODEJS default version"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y    &>> $LOG_FILE
 VALIDATE $? "Enabling required NODEJS version"
 
-dnf install nodejs -y
+dnf install nodejs -y      &>> $LOG_FILE
 VALIDATE $? "Installing NODEJS"
 
 dnf update -y openssh openssh-server openssh-clients
 VALIDATE  $? "Updating SSH packages"
 
-useradd expense
+useradd expense    &>> $LOG_FILE
 VALIDATE $? "Adding expense user"
 
-mkdir -p /app
+mkdir -p /app   &>> $LOG_FILE
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/backend.zip https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
@@ -53,22 +53,22 @@ VALIDATE $? "Downloading backend zip file"
 cd /app
 VALIDATE $? "Moving to app directory"
 
-unzip /tmp/backend.zip
+unzip /tmp/backend.zip   &>> $LOG_FILE
 VALIDATE $? "Unzipping backend zip file"
 
-npm install
+npm install    &>> $LOG_FILE
 VALIDATE $? "Installing nodejs depencencies"
 
 cp "$SCRIPT_DIR/backend.service"   /etc/systemd/system/backend.service
 VALIDATE $? "Copying backend service file"
 
-systemctl daemon-reload
-systemctl enable backend
+systemctl daemon-reload  &>> $LOG_FILE
+systemctl enable backend  &>> $LOG_FILE
 systemctl start backend
 VALIDATE $? "Enabling and starting backend service"
 
 
-dnf install mysql -y
+dnf install mysql -y   &>> $LOG_FILE
 VALIDATE $? "Installing MYSQL client package"
 
 # mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 < /app/schema/backend.sql
@@ -92,7 +92,7 @@ fi
 # fi
 
 
-systemctl restart backend
+systemctl restart backend   &>> $LOG_FILE
 VALIDATE $? "Restarting backend service"
 
 
