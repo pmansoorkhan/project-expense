@@ -14,22 +14,25 @@ INSTANCE_ID=$( aws ec2 run-instances \
     --security-group-ids "$SG_ID" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
     --query 'Instances[0].InstanceId' \
-    --output text)
+    --output text
+    )
 # echo "Instance Name and ID : "$instance", "$INSTANCE_ID"" 
 
         if [ "$instance" == "frontend" ]; then
                     IP=$( aws ec2 describe-instances \
                     --instance-ids "$INSTANCE_ID" \
                     --query "Reservations[].Instances[].PublicIpAddress" \
-                    --output text)
-            #sleep 5       
+                    --output text
+                    )
+            sleep 5       
             RECORD_NAME="$DOMAIN_NAME"     #shannu.online    
         else 
                 IP=$( aws ec2 describe-instances \
                 --instance-ids "$INSTANCE_ID" \
                 --query "Reservations[].Instances[].PrivateIpAddress" \
-                --output text)
-            #sleep 5
+                --output text
+                )
+            sleep 5
              RECORD_NAME="$instance.$DOMAIN_NAME"    #mongodb.shannu.online
          
         fi            
@@ -58,3 +61,5 @@ INSTANCE_ID=$( aws ec2 run-instances \
          echo "Instance Name Record & IP : "$instance"-> "$RECORD_NAME"  "$IP""
         
 done
+
+## give the command as ## sh expense.sh backend frontend mysql ##---> to execute the deployment 
