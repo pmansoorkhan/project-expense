@@ -52,7 +52,7 @@ print_total_time
 # ***************
 # Checking MYSQL database and tables from own machine using MYSQL client 
 # *********************
-# mysql 
+#mysql -h mysql.shannu.online -u root -pExpenseApp@1 or mysql 
 # show databases;
 # use transactions;
 # show tables;
