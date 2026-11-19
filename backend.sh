@@ -115,7 +115,7 @@ print_total_time
 # ***************
 # Checking MYSQL database and tables from backend server 
 # *********************
-# mysql -h $MYSQL_HOST -uroot -pExpenseApp@1
+# mysql -h $MYSQL_HOST -uroot -pExpenseApp@1 or mysql 
 # show databases;
 # use transactions;
 # show tables;
